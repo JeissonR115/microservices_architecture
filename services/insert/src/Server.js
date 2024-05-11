@@ -1,22 +1,18 @@
-import { DataBase } from "./DataBase.js";
 import cors from "cors";
 import express from "express";
 import bodyParser from "body-parser";
 import { Inserter } from "./Inserter.js";
 
 export class Server {
-    constructor({ url, dbName, collectionList, collectionName, port }) {
-        this.url = url;
-        this.dbName = dbName;
-        this.collectionList = collectionList;
-        this.collectionName = collectionName;
+    constructor({ port, db = null }) {
         this.port = port;
         this.serverRunning = false;
+        this.db = db
     }
 
     async start() {
         await this.setupExpressApp();
-        await this.connectToDatabase();
+        await this.db.connectDB();
         this.setupRoutes();// Define las rutas de la aplicación Express
         await this.listenAndServe(); // Intenta iniciar el servidor en el puerto especificado
         return this.serverRunning;// Devuelve el estado del servidor
@@ -28,11 +24,6 @@ export class Server {
         this.app.use(bodyParser.json());
     }
 
-    async connectToDatabase() {
-        const dataBase = new DataBase(this.url, this.dbName, this.collectionList);
-        await dataBase.connectDB();
-        dataBase.use(this.collectionName);
-    }
 
     setupRoutes() {
         this.app.get('/', (req, res) => {
@@ -41,7 +32,25 @@ export class Server {
         });
 
         this.app.post('/insert', async (req, res) => {
-            // Lógica para insertar datos en la base de datos
+            try {
+                const inserter = new Inserter({
+                    data: {
+                        idNumber:req.body.Documento,
+                        name1:req.body.Nombre1,
+                        name2:req.body.Nombre2,
+                        lastName1:req.body.Apellido1,
+                        lastName2:req.body.Apellido2,
+                        email:req.body.Correo,
+                        phoneNumber:req.body.Telefono
+                    },
+                    db: await this.db.getDB(),
+                    collectionName: 'UsuariosM'
+                });
+                const result = await inserter.insertData();
+                res.status(200).json(result);
+            } catch (error) {
+                res.status(400).json({ error: error.message });
+            }
         });
     }
 
@@ -64,7 +73,7 @@ export class Server {
                             setTimeout(() => {
                                 resolve(); // Intentar nuevamente después de un breve retraso
                             }, retryDelay);
-                            
+
                         } else {
                             console.error(`Error al iniciar el servidor: ${err.message}`);
                             reject(err);
