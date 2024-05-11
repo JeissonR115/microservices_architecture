@@ -1,7 +1,7 @@
 export class Inserter {
     constructor({ data, db, collectionName }) {
         this.data = data; // Almacena los datos en la instancia
-        this.idNumber = Number(data.idNumber);
+        this.idNumber = String(data.idNumber);
         this.name1 = data.name1.toLowerCase();
         this.name2 = data.name2.toLowerCase();
         this.lastName1 = data.lastName1.toLowerCase();

@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+
 class Server:
     def __init__(self, port, db_url=None, db_name=None, collection_name=None):
         self.port = port
@@ -29,10 +30,9 @@ class Server:
         def delete():
             try:
                 id_number = request.json.get('Documento')
-                print(id_number)
                 deleter = UserDeleter(db_url=self.db_url, db_name=self.db_name, collection_name=self.collection_name)
                 result = deleter.delete_user(id_number)
-                return jsonify(result), 200
+                return jsonify(result), 200 if result['success'] else 400
             except Exception as e:
                 return jsonify({'error': str(e)}), 400
             
@@ -66,7 +66,7 @@ class UserDeleter:
             collection = db[self.collection_name]
             result = collection.delete_one({"Documento": id_number})
             if result.deleted_count == 1:
-                return {"success": True, "message": f"User with idNumber {id_number} deleted successfully","id":id_number}
+                return {"success": True, "message": f"User with idNumber {id_number} deleted successfully", "id": id_number}
             else:
                 return {"success": False, "message": f"No user found with idNumber {id_number}"}
         except Exception as e:
