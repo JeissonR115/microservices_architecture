@@ -4,7 +4,8 @@ const { exec } = require('child_process');
 const microservices = [
     { path: './services/insert/main.js', command: 'node' },
     { path: './services/delete/main.py', command: 'python3' },
-    { path: './services/query/main.jar', command: 'java -jar' },
+    { path: './services/query/main.py', command: 'python3' },
+    { path: './services/update/main.js', command: 'node' },
 ];
 
 // Execute each microservice
