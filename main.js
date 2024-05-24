@@ -3,7 +3,7 @@ const { exec } = require('child_process');
 // Define the list of microservice files
 const microservices = [
     { path: './services/insert/main.js', command: 'node' },
-    { path: './services/delete/main.py', command: 'python3' },
+    { path: './services/delete/main', command: '' },
     { path: './services/query/main.py', command: 'python3' },
     { path: './services/update/main.js', command: 'node' },
 ];
