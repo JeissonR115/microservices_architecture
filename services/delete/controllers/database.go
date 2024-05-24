@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -27,8 +28,7 @@ func (db *Database) Init(connectionString string) {
 	if err != nil {
 		log.Fatalf("Error al conectar a la base de datos: %v", err)
 	}
-
-	log.Println("Conexión exitosa a la base de datos.")
+	fmt.Println("Conexión exitosa a la base de datos.")
 }
 func (db *Database) Close() {
 	db.Conn.Close()
