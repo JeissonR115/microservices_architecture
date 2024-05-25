@@ -5,7 +5,7 @@ const microservices = [
     { path: './services/insert/main.js', command: 'node', lang:'JS' },
     { path: './services/delete/main', command: '', lang:'GO' },//go
     { path: './services/query/main.py', command: 'python3', lang:'PY' },
-    { path: './services/update/main.js', command: 'node', lang:'JS' },
+    { path: './services/update/main.php', command: 'php -S localhost:3000', lang:'PHP' },
 ];
 
 // Execute each microservice
