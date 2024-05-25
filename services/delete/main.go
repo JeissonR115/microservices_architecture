@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	dsn := "jeissonr115:pipe115.@tcp(127.0.0.1:3306)/users"
+	dsn := "jeissonr115:pipe115.@tcp(127.0.0.1:3010)/users"
 	db, err := controllers.NewDatabase(dsn)
 	if err != nil {
 		panic(err)
