@@ -4,12 +4,12 @@
 class User {
     private $id;
     private $username;
-    private $email;
+    private $age;
 
-    public function __construct($id, $username, $email) {
+    public function __construct($id, $username, $age) {
         $this->id = $id;
         $this->username = $username;
-        $this->email = $email;
+        $this->age = $age;
     }
 
     public function getId() {
@@ -20,9 +20,8 @@ class User {
         return $this->username;
     }
 
-    public function getEmail() {
-        return $this->email;
+    public function getage() {
+        return $this->age;
     }
 
-    // Otros métodos relacionados con el usuario, como guardar en la base de datos, actualizar, eliminar, etc.
 }

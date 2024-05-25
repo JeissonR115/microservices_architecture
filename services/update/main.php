@@ -1,25 +1,37 @@
 <?php
-// Archivo de configuración de la base de datos
-require_once 'app/controllers/database.php';
 
-// Clase principal de la aplicación
-class Application {
-    private $database;
+// Incluir la clase de base de datos
+require_once 'app/controllers/Database.php';
 
-    public function __construct(Database $database) {
-        $this->database = $database;
-    }
+// Incluir el controlador de rutas
+require_once 'app/controllers/RouteController.php';
 
-    public function run() {
-        $this->database->connect();
-        $this->database->close();
-    }
-}
+// Crear una instancia de la clase Database con las credenciales de conexión
+$db = new Database('localhost', 'jeissonr115', 'pipe115.', 'users');
+
+// Conectar a la base de datos
+$db->connect();
+
+// Crear una instancia del controlador de rutas
+$routeController = new RouteController($db);
+
+// Obtener la URL de la solicitud actual
+$request_uri = $_SERVER['REQUEST_URI'];
+
+// Obtener el método HTTP de la solicitud
+$request_method = 'POST';
+
+// Leer el contenido del cuerpo de la solicitud
+$request_body = file_get_contents('php://input');
+
+// Decodificar el JSON del cuerpo de la solicitud
+$request_data = json_decode($request_body, true);
 
 
-$database = new Database("localhost", "jeissonr115", "pipe115.", "users");
+// Manejar la solicitud y obtener la respuesta
+$response = $routeController->handleRequest($request_uri, $request_method, $request_data);
 
-// Crear una instancia de la clase Application y ejecutar la aplicación
-$application = new Application($database);
-$application->run();
+// Mostrar la respuesta
+echo $response;
+
 ?>
