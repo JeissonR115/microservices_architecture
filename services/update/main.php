@@ -19,14 +19,13 @@ $routeController = new RouteController($db);
 $request_uri = $_SERVER['REQUEST_URI'];
 
 // Obtener el método HTTP de la solicitud
-$request_method = 'POST';
+$request_method = $_SERVER['REQUEST_METHOD'];
 
 // Leer el contenido del cuerpo de la solicitud
 $request_body = file_get_contents('php://input');
 
 // Decodificar el JSON del cuerpo de la solicitud
 $request_data = json_decode($request_body, true);
-
 
 // Manejar la solicitud y obtener la respuesta
 $response = $routeController->handleRequest($request_uri, $request_method, $request_data);

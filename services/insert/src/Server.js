@@ -7,15 +7,15 @@ export class Server {
     constructor({ port, db = null }) {
         this.port = port;
         this.serverRunning = false;
-        this.db = db
+        this.db = db;
     }
 
     async start() {
         await this.setupExpressApp();
         await this.db.connectDB();
-        this.setupRoutes();// Define las rutas de la aplicación Express
-        await this.listenAndServe(); // Intenta iniciar el servidor en el puerto especificado
-        return this.serverRunning;// Devuelve el estado del servidor
+        this.setupRoutes();
+        await this.listenAndServe();
+        return this.serverRunning;
     }
 
     async setupExpressApp() {
@@ -24,27 +24,19 @@ export class Server {
         this.app.use(bodyParser.json());
     }
 
-
     setupRoutes() {
         this.app.get('/', (req, res) => {
             const message = this.serverRunning ? 'Servidor en ejecución' : 'Error en el servidor';
             res.send(`<html><body><h1>${message}</h1></body></html>`);
         });
 
-        this.app.post('/insert', async (req, res) => {
+        this.app.post('/users/insert', async (req, res) => {
             try {
+                const data = req.body;
                 const inserter = new Inserter({
-                    data: {
-                        idNumber:req.body.Documento,
-                        name1:req.body.Nombre1,
-                        name2:req.body.Nombre2,
-                        lastName1:req.body.Apellido1,
-                        lastName2:req.body.Apellido2,
-                        email:req.body.Correo,
-                        phoneNumber:req.body.Telefono
-                    },
+                    data,
                     db: await this.db.getDB(),
-                    collectionName: 'UsuariosM'
+                    tableName: 'users' 
                 });
                 const result = await inserter.insertData();
                 res.status(200).json(result);
@@ -55,7 +47,7 @@ export class Server {
     }
 
     async listenAndServe(maxAttempts = 10, retryDelay = 500) {
-        let attempts = 0; // Contador de intentos
+        let attempts = 0;
 
         const startServer = async () => {
             try {
@@ -71,7 +63,7 @@ export class Server {
                             console.log(`Intentando iniciar en el puerto ${this.port}...`);
                             attempts++;
                             setTimeout(() => {
-                                resolve(); // Intentar nuevamente después de un breve retraso
+                                resolve();
                             }, retryDelay);
 
                         } else {

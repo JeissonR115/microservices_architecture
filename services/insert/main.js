@@ -1,14 +1,15 @@
 import { DataBase } from "./src/DataBase.js";
 import { Server } from "./src/Server.js";
-export const dataBase = new DataBase({
-    url: 'mongodb+srv://ambidata2024:ambidata2024**@ambidata.vn0dlbx.mongodb.net/',
-    dbName: 'ambidata',// Definir el nombre de la base de datos.
-    collections: {
-        sensorData: "sensorData",
-        users: "users",
-        UsuariosM: "UsuariosM"
-    }
-})
+
+const dbConfig = {
+    host: 'localhost', // Cambia estos valores según tu configuración de MySQL
+    user: 'jeissonr115',
+    password: 'pipe115.',
+    database: 'users'
+};
+
+export const dataBase = new DataBase(dbConfig);
+
 export class Main {
     static startServer() {
         const server = new Server({
@@ -18,4 +19,5 @@ export class Main {
         server.start();
     }
 }
+
 Main.startServer();

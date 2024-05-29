@@ -21,7 +21,6 @@ class Database {
         if ($this->conn->connect_error) {
             die("Conexión fallida: " . $this->conn->connect_error);
         }
-         echo "Conexión exitosa a la base de datos <br/>";
     }
 
     // Método para cerrar la conexión

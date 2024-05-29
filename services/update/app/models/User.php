@@ -3,12 +3,12 @@
 // Modelo de Usuario
 class User {
     private $id;
-    private $username;
+    private $name;
     private $age;
 
-    public function __construct($id, $username, $age) {
+    public function __construct($id, $name, $age) {
         $this->id = $id;
-        $this->username = $username;
+        $this->name = $name;
         $this->age = $age;
     }
 
@@ -16,8 +16,8 @@ class User {
         return $this->id;
     }
 
-    public function getUsername() {
-        return $this->username;
+    public function getname() {
+        return $this->name;
     }
 
     public function getage() {

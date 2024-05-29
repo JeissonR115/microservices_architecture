@@ -8,12 +8,14 @@ class RouteController {
 
     public function __construct($db) {
         $this->db = $db;
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+        header("Access-Control-Allow-Headers: Content-Type, Authorization");
     }
 
     public function handleRequest($request_uri, $request_method, $request_data) {
         // Obtener la ruta de la solicitud
         $route = parse_url($request_uri, PHP_URL_PATH);
-
         // Instanciar el controlador de usuario
         $userController = new UserController($this->db);
 
@@ -21,13 +23,17 @@ class RouteController {
         switch ($route) {
             case '/user/update':
                 // Verificar si el método de la solicitud es POST
-                if ($request_method === 'POST') {
-                    // Obtener los datos del usuario enviados desde el front-end
-                    $id = $request_data['id'];
-                    $name = $request_data['name'];
-                    $age = $request_data['age'];
-                    // Llamar al método para actualizar un usuario
-                    $response = $userController->updateUser($id, ['name' => $name, 'age' => $age]);
+                if ($request_method === 'PUT') {
+                    // Validar que los datos del usuario estén presentes
+                    if (isset($request_data['id']) && isset($request_data['name']) && isset($request_data['age'])) {
+                        // Obtener los datos del usuario enviados desde el front-end
+                        $id = $request_data['id'];
+                        $name = $request_data['name'];
+                        $age = $request_data['age'];
+                        $response = $userController->updateUser($id, ['name' => $name, 'age' => $age]);
+                    } else {
+                        $response = "Faltan datos necesarios en la solicitud";
+                    }
                 } else {
                     // Si no es un método POST, retornar un mensaje de error
                     $response = "Método no permitido para esta ruta";

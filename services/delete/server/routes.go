@@ -3,19 +3,16 @@ package server
 import (
 	"delete/controllers"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
-func InitializeRoutes(uc *controllers.User) *http.ServeMux {
-	router := http.NewServeMux()
+func InitializeRoutes(uc *controllers.User) http.Handler {
+	router := mux.NewRouter()
 
-	// Ruta para obtener todos los usuarios
-	router.HandleFunc("/users", uc.HandleGetAll)
-
-	// Ruta para obtener un usuario por su ID
-	router.HandleFunc("/users/", uc.HandleGetByID)
-
-	// Ruta para eliminar un usuario por su ID
-	router.HandleFunc("/users/delete", uc.HandleDeleteUser)
+	router.HandleFunc("/users", uc.HandleGetAll).Methods(http.MethodGet)
+	router.HandleFunc("/users/get/{id}", uc.HandleGetByID).Methods(http.MethodGet)
+	router.HandleFunc("/users/delete", uc.HandleDeleteUser).Methods(http.MethodDelete)
 
 	return router
 }

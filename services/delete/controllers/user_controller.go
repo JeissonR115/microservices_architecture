@@ -7,16 +7,16 @@ import (
 )
 
 type User struct {
-	DB *Database
+	DB *sql.DB
 }
 
-func NewUser(db *Database) *User {
+func NewUser(db *sql.DB) *User {
 	return &User{DB: db}
 }
 
 func (uc *User) GetAll() ([]models.User, error) {
 	query := "SELECT id, name, age FROM users"
-	rows, err := uc.DB.Conn.Query(query)
+	rows, err := uc.DB.Query(query)
 	if err != nil {
 		log.Fatalf("Error ejecutando la consulta: %v", err)
 		return nil, err
@@ -45,7 +45,7 @@ func (uc *User) GetAll() ([]models.User, error) {
 
 func (uc *User) GetByID(userID int) (*models.User, error) {
 	query := "SELECT id, name, age FROM users WHERE id = ?"
-	row := uc.DB.Conn.QueryRow(query, userID)
+	row := uc.DB.QueryRow(query, userID)
 
 	var user models.User
 	err := row.Scan(&user.ID, &user.Name, &user.Age)
@@ -62,7 +62,7 @@ func (uc *User) GetByID(userID int) (*models.User, error) {
 
 func (uc *User) DeleteByID(userID int) error {
 	query := "DELETE FROM users WHERE id = ?"
-	_, err := uc.DB.Conn.Exec(query, userID)
+	_, err := uc.DB.Exec(query, userID)
 	if err != nil {
 		log.Fatalf("Error eliminando el usuario: %v", err)
 		return err
